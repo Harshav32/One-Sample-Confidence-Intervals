@@ -1,0 +1,493 @@
+<P><BR>
+<CENTER>
+<FONT SIZE = 5, COLOR="#000065">
+<B>ALY6010 Project 2 Report</B>  
+<B>One-sample Confidence Intervals 
+</B>  
+<B>Harsha Vardhan Reddy Kasireddy</B></FONT>  
+<FONT SIZE = 4, COLOR="#660001">
+Instructor: Dee Chiluiza, PhD  
+Northeastern University  
+Date: 12 November,2023
+</FONT>
+</CENTER>  
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+library(readxl)
+library(rmarkdown)
+library(dplyr)
+library(readr)
+library(tidyverse)
+library(knitr)
+library(RColorBrewer)
+library(magrittr)
+library(kableExtra)
+library(ggplot2)
+library(tidyr)
+library(readxl)
+Salary_Survey <- read_excel("C:/Users/91709/Downloads/M2Data(2023).xlsx",sheet="salary_survey")
+ pet_data <-read_excel("C:/Users/91709/Downloads/M2Data(2023).xlsx",sheet="pets")
+```
+
+<P><BR>
+<FONT SIZE=4 COLOR='#A11516'>
+<B>INTRODUCTION:</B></FONT><BR>
+        Pay surveys hold significance for employers and employees alike. Salary surveys are used by both employers and employees to negotiate pay. Employers use them to decide what to pay their employees. In addition, salary surveys can be used to spot trends in the software employment market, such as the most in-demand skills and the highest paying companies.
+
+A way to gauge the degree of uncertainty surrounding a statistic, like a mean or proportion, is to use confidence intervals. Confidence intervals are produced by computing the upper and lower bounds of the population value using a sample of data. Because confidence intervals enable us to draw conclusions about the population from a sample of data, they are crucial.
+Salary surveys and confidence intervals are useful in the software employment sector for the following reasons:<BR>
+Salary surveys can be used by employers to decide how much to pay their staff members. This is crucial because it guarantees that workers receive fair compensation and that the business will continue to be competitive in the labor market.<BR>
+Salary negotiations can be facilitated by employees using salary surveys. Employees can be better negotiators if they are aware of what other workers in their industry are making.
+Salary surveys are a useful tool for recruiters to draw in and keep top candidates.<BR> Recruiters can improve their chances of drawing in and keeping the top software engineers by providing competitive salaries.<BR>
+Software engineers can assess how much they make compared to other software engineers in their field by using salary surveys. When deciding whether to accept a job offer or negotiate a salary, this information may be useful.<BR>
+<B>Confidence Intervals:</B><BR>
+Strong statistical tools that offer a range of reasonable values for an unknown population parameter are confidence intervals. Confidence intervals provide a way to measure the uncertainty in our estimates when we use statistical inference to make inferences about populations from samples.
+<BR>
+When estimating a population parameter, like the mean or proportion, using only one sample, a one-sample confidence interval is used. When working with data from a single group or condition and trying to draw conclusions about the larger population from where the required sample was taken, this approach is especially helpful.
+<BR>
+When creating a one-sample confidence interval, a level of confidence must be specified. This level of confidence is usually expressed as a percentage (e.g., 95% or 99%). The probability that the interval we compute will contain the actual population parameter is reflected in this percentage. The interval widens with increasing confidence level, encompassing a greater range of possible values.
+<BR>
+The parameter of interest determines the formula for a one-sample confidence interval. Depending on size of the sample and population's SD is known, estimating the population mean frequently involves the sample mean, standard deviation, sample size, and a critical value from the standard normal or t-distribution.
+
+<BR>
+ <B>References:
+</B><BR>
+1."Salary Surveys: What Employers and Employees Need to Know.", by Society for the Human Resource Management (SHRM)<BR>
+2."Confidence Intervals and Their Applications" from American Statistical Association (ASA)<BR>
+3."The Importance of Salary Surveys in the Software Job Industry" by Software Engineering Institute (SEI) located at Carnegie Mellon University.
+<BR>
+<P><BR>
+<FONT SIZE=4 COLOR='#A11515'>
+<B>Analysis section:</B></FONT>
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 1:</B></FONT> <P>The data given shows hourly wages of whole employees from the 20 randomly selected retail stores. We need to perform some tasks on this data. We investigate and statistically analyze a salary survey dataset in this extensive data analysis of this task 1. The dataset includes data from several participants, each connected to a particular retailer. The tasks involved in this analysis, which include graphical representations, normalization, descriptive statistics, and confidence intervals, are intended to intended to learn of a variety of topics pertaining to the salary survey.
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 1.1:Descriptive Statistics and Confidence Intervals of the salary survey data set.</B></FONT><BR><P>
+```{r,  Task1.1, warning=FALSE,results='asis'}
+# Calculating the 1. mean, 2.mean and 3.standard deviation
+n <- 247
+grand_mean <- mean(unlist(Salary_Survey), na.rm = TRUE)
+grand_sd <- sd(unlist(Salary_Survey), na.rm = TRUE)
+# Displaying the 1. n, 2.mean, and 3.standard deviation
+cat("n =", n, "\n")
+cat("Mean =", grand_mean, "\n")
+cat("Standard Deviation =", grand_sd, "\n")
+# Calculation of confidence intervals of salary survey dataset.
+confidence_levels <- c(0.95, 0.97, 0.99)
+z_values <- qnorm(1 - (1 - confidence_levels) / 2)
+margins_of_error <- z_values * (grand_sd / sqrt(n))
+lower_confidence_limits <- grand_mean - margins_of_error
+upper_confidence_limits <- grand_mean + margins_of_error
+confidence_interval_widths <- 2 * margins_of_error
+# Creating the data frame for the table.
+confidence_intervals_df <- data.frame(
+  Confidence_Level = c("95%", "97%", "99%"),
+  Z_Value = z_values,
+  Margin_of_Error = margins_of_error,
+  Lower_Confidence_Limit = lower_confidence_limits,
+  Upper_Confidence_Limit = upper_confidence_limits,
+  Confidence_Interval_Width = confidence_interval_widths
+)
+confidence_intervals_table <- kable(
+  confidence_intervals_df,
+  format = "markdown",
+) %>%
+  kable_styling()
+print(confidence_intervals_table)
+```
+The first step is to compute the basic descriptive statistics for the whole dataset, such as the grand mean, the standard deviation, and the number of observations (n). These measures provide basic understandings of the salary survey data's central tendency and variability. The outcomes are displayed in a structured table that offers a clear synopsis of the main features of the dataset. 
+From the table it is evident that the Mean of the whole data is ``11.81``. And the ``standard deviation is 3.24``. 
+<BR>
+At, 95% confidence level Margin of error is 0.4050668. And the ``Lower Confidence Limit = 11.40585``<BR>``Upper Confidence Limit=12.21599``
+<BR>
+At, 97% confidence level Margin of error is 0.4050668. And the ``Lower Confidence Limit = 11.36243``<BR>``Upper Confidence Limit=12.25942``
+<BR>
+At, 99% confidence level Margin of error is 0.5323480. And the ``Lower Confidence Limit = 11.27857``<BR>``Upper Confidence Limit=12.34327``
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 1.2: Store-specific Statistics and Grand Mean.</B></FONT>
+```{r, Task1.2,results='asis'}
+#Calculating the mean and the standard deviation per store and presentation of these values in the table.
+store_stats <- lapply(Salary_Survey, function(store_data){
+  mean_value <- mean(store_data, na.rm = TRUE)
+  sd_value <- sd(store_data, na.rm = TRUE)
+  data.frame(Mean = mean_value, SD = sd_value)
+})
+store_stats_df <- bind_rows(store_stats, .id = "Store")
+styled_store_stats_table <- store_stats_df %>%
+  kable("html") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    latex_options = c("striped", "scale_down")
+  ) %>%
+  column_spec(1, bold = TRUE)
+# Printing of the styled table after styling
+print(styled_store_stats_table)
+#Calculation of the average grand mean and grand standard deviation for all the 20 stores.
+grand_mean_all_stores <- mean(store_stats_df$Mean, na.rm = TRUE)
+grand_sd_all_stores <- sd(store_stats_df$Mean, na.rm = TRUE)
+cat("n =", length(store_stats_df$Store), "\n")
+cat("Mean (Grand) =", grand_mean_all_stores, "\n")
+cat("Standard Deviation (Grand) =", grand_sd_all_stores, "\n")
+#Calculation of confidence intervals at 95%, 97%, and 99% and presentation in a professional table.
+confidence_levels <- c(0.95, 0.97, 0.99)
+t_values <- qt(1 - (1 - confidence_levels) / 2, df = length(store_stats_df$Store) - 1)
+margins_of_error <- t_values * (grand_sd_all_stores / sqrt(length(store_stats_df$Store)))
+lower_confidence_limits <- grand_mean_all_stores - margins_of_error
+upper_confidence_limits <- grand_mean_all_stores + margins_of_error
+confidence_interval_widths <- 2 * margins_of_error
+confidence_intervals_grand_mean_df <- data.frame(
+  Confidence_Level = confidence_levels * 100,
+  T_Value = t_values,
+  Margin_of_Error = margins_of_error,
+  Lower_Confidence_Limit = lower_confidence_limits,
+  Upper_Confidence_Limit = upper_confidence_limits,
+  Confidence_Interval_Width = confidence_interval_widths
+)
+styled_confidence_intervals_table <- confidence_intervals_grand_mean_df %>%
+  kable("html") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    latex_options = c("striped", "scale_down")
+  ) %>%
+  column_spec(1, bold = TRUE)
+# Printing table
+styled_confidence_intervals_table
+```
+<BR>
+The generated table presents the Z-values, margins of error, upper and lower confidence limits, and the widths of the confidence intervals. This statistical technique aids in understanding the precision of our mean estimates.
+We presented a table which is consisting of 20 stores and their respective means and standard deviation.
+``Highest mean= Store 15 with 16.52 salary.``
+``Lowest mean= Store 6 with 8.29 salary.``
+``Standard Deviation (Grand) = 3.094063``<BR>
+At, 95% confidence level Margin of error is 1.448066. And the ``Lower Confidence Limit = 10.38206``<BR>``Upper Confidence Limit=13.27819``
+<BR>
+At, 97% confidence level Margin of error is 1.622844. And the ``Lower Confidence Limit = 10.20728``<BR>``Upper Confidence Limit=13.45297``
+<BR>
+At, 99% confidence level Margin of error is 1.979348. And the ``Lower Confidence Limit = 9.85078``<BR>``Upper Confidence Limit=13.80948``<BR>
+Moving forward, confidence intervals are computed to establish a range of plausible values for the true mean of the salary distribution. Utilizing Z-values for a large dataset (n=247), confidence intervals are calculated at varying levels (95%, 97%, and 99%). 
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 1.3:Comparison of Confidence Intervals.</B></FONT><P>
+```{r, Task1.3,results='asis'}
+#Calculating the confidence intervals using the original approach (Task 1.1)
+confidence_levels_1.1 <- c(0.95, 0.97, 0.99)
+z_values_1.1 <- qnorm(1 - (1 - confidence_levels_1.1) / 2)
+margins_of_error_1.1 <- z_values_1.1 * (grand_sd / sqrt(n))
+lower_confidence_limits_1.1 <- grand_mean - margins_of_error_1.1
+upper_confidence_limits_1.1 <- grand_mean + margins_of_error_1.1
+confidence_interval_widths_1.1 <- 2 * margins_of_error_1.1
+#Calculation of the confidence intervals using the per-store approach (Task 1.2)
+confidence_levels_1.2 <- c(0.95, 0.97, 0.99)
+t_values_1.2 <- qt(1 - (1 - confidence_levels_1.2) / 2, df = length(store_stats_df$Store) - 1)
+margins_of_error_1.2 <- t_values_1.2 * (grand_sd_all_stores / sqrt(length(store_stats_df$Store)))
+lower_confidence_limits_1.2 <- grand_mean_all_stores - margins_of_error_1.2
+upper_confidence_limits_1.2 <- grand_mean_all_stores + margins_of_error_1.2
+confidence_interval_widths_1.2 <- 2 * margins_of_error_1.2
+# Creaing the data frames for the tables
+confidence_intervals_1.1_df <- data.frame(
+  Confidence_Level = confidence_levels_1.1 * 100,
+  Z_Value = z_values_1.1,
+  Margin_of_Error = margins_of_error_1.1,
+  Lower_Confidence_Limit = lower_confidence_limits_1.1,
+  Upper_Confidence_Limit = upper_confidence_limits_1.1,
+  Confidence_Interval_Width = confidence_interval_widths_1.1
+)
+confidence_intervals_1.2_df <- data.frame(
+  Confidence_Level = confidence_levels_1.2 * 100,
+  T_Value = t_values_1.2,
+  Margin_of_Error = margins_of_error_1.2,
+  Lower_Confidence_Limit = lower_confidence_limits_1.2,
+  Upper_Confidence_Limit = upper_confidence_limits_1.2,
+  Confidence_Interval_Width = confidence_interval_widths_1.2
+)
+# Displaying the tables after styling
+styled_confidence_intervals_1.1_table <- confidence_intervals_1.1_df %>%
+  kable("html") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    latex_options = c("striped", "scale_down")
+  ) %>%
+  column_spec(1, bold = TRUE)
+styled_confidence_intervals_1.2_table <- confidence_intervals_1.2_df %>%
+  kable("html") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    latex_options = c("striped", "scale_down")
+  ) %>%
+  column_spec(1, bold = TRUE)
+# Printing the styled tables.
+print("Task 1.1 Confidence Intervals:")
+print(styled_confidence_intervals_1.1_table)
+print("Task 1.2 Confidence Intervals:")
+print(styled_confidence_intervals_1.2_table)
+# Comparing the confidence interval widths.
+cat("\nComparison of Confidence Interval Widths:\n")
+cat("Task 1.1 Mean CI Width =", mean(confidence_interval_widths_1.1), "\n")
+cat("Task 1.2 Mean CI Width =", mean(confidence_interval_widths_1.2), "\n")
+```
+An analysis is carried out to compare the confidence intervals that were obtained in Tasks 1.1 and 1.2. A close eye is kept on the width of the confidence intervals, which is a crucial sign of the accuracy and dependability of the estimations. 
+From the table it is evident that the ``Task 1.1 Mean Confidence Interval Width = 0.9239389`` And the ``Task 1.2 Mean Confidence Interval Width = 3.366839``
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 1.4: Data Normalization.</B></FONT>
+```{r, Task1.4}
+# Now, Using the subset created for Task 1.1.
+subset_data <- unlist(Salary_Survey)
+# Normalizing the data.
+normalized_data <- scale(subset_data)
+# Creating an object for storing the normalized data.
+normalized_data_object <- as.data.frame(matrix(normalized_data, ncol = ncol(Salary_Survey), byrow = TRUE))
+```
+To scale the values and bring them within a standard range, the dataset is normalized. In order to make sure that data from various stores are comparable and appropriate for further analysis, the normalization process is essential. The normalization code, which contains the transformation performed on the dataset, is made available.
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 1.5:Generating a Density Plot with Standard Deviation Lines on the plot.</B></FONT>
+```{r, Task1.5}
+# Using subset which is created for Task 1.1.
+subset_data <- unlist(Salary_Survey)
+# Removal of missing values.
+subset_data <- subset_data[!is.na(subset_data)]
+# Calculating the mean and the standard deviation.
+mean_value <- mean(subset_data)
+sd_value <- sd(subset_data)
+# Creating the density plot with vertical lines.
+density_plot <- density(subset_data)
+plot(density_plot, main = "Density Plot with Actual Data", xlab = "Values", ylab = "Density", col = "blue")
+# Adding the vertical lines for the mean and the standard deviations.
+abline(v = mean_value, col = "red", lty = 2, lwd = 2)
+abline(v = mean_value + sd_value, col = "green", lty = 2, lwd = 2)
+abline(v = mean_value - sd_value, col = "green", lty = 2, lwd = 2)
+abline(v = mean_value + 2 * sd_value, col = "orange", lty = 2, lwd = 2)
+abline(v = mean_value - 2 * sd_value, col = "orange", lty = 2, lwd = 2)
+abline(v = mean_value + 3 * sd_value, col = "purple", lty = 2, lwd = 2)
+abline(v = mean_value - 3 * sd_value, col = "purple", lty = 2, lwd = 2)
+# Adding labels for the mean and the standard deviation lines.
+text(mean_value, max(density_plot$y) * 0.8, "Mean", pos = 3, col = "red")
+text(mean_value + sd_value, max(density_plot$y) * 0.7, "1 SD", pos = 3, col = "green")
+text(mean_value - sd_value, max(density_plot$y) * 0.7, "1 SD", pos = 1, col = "green")
+text(mean_value + 2 * sd_value, max(density_plot$y) * 0.6, "2 SD", pos = 3, col = "orange")
+text(mean_value - 2 * sd_value, max(density_plot$y) * 0.6, "2 SD", pos = 1, col = "orange")
+text(mean_value + 3 * sd_value, max(density_plot$y) * 0.5, "3 SD", pos = 3, col = "purple")
+text(mean_value - 3 * sd_value, max(density_plot$y) * 0.5, "3 SD", pos = 1, col = "purple")
+
+```
+<B>Density plot with actual data:</B><BR>This code uses the density() function for the density plot and adds vertical lines for the mean and three standard deviations on both sides of the mean. Labels are added to indicate the mean and the standard deviation lines. To see how the actual salary data is distributed, a density plot is created. A thorough depiction of the distribution and central tendency of the data is provided by the plot, which includes vertical lines representing the mean and standard deviations.
+<BR>From the density plot we can see mean is pointed at 11.8 with red colour vertical line on the plot. 1 SD is pointed at 15, 2 SD at 18, 3 SD pointed at 22.<BR>
+Also, in negative direction 1 Sd is pointed at around 9, 2 SD pointed at near 5 and the 3 SD located at around 1.
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 1.6:Normalized Density Plot with Confidence Intervals.</B></FONT>
+```{r, Task1.6}
+# Using the subset which is created for the Task 1.1.
+subset_data <- unlist(Salary_Survey)
+# Removing the missing values.
+subset_data <- subset_data[!is.na(subset_data)]
+# Normalization of the data.
+normalized_data <- scale(subset_data)
+# Calculating the mean and the standard deviation for normalized data.
+mean_value_normalized <- mean(normalized_data)
+sd_value_normalized <- sd(normalized_data)
+# Calculating the Z-values for the 95% confidence interval.
+z_values <- qnorm(c(0.025, 0.975))
+z_values_scaled <- z_values * sd_value_normalized + mean_value_normalized
+#Calculating T-values for the 95% confidence interval.
+t_values <- qt(c(0.025, 0.975), df = length(subset_data) - 1)
+t_values_scaled <- t_values * sd_value_normalized + mean_value_normalized
+# Create the density plot with the vertical lines
+density_plot_normalized <- density(normalized_data)
+plot(density_plot_normalized, main = "Density Plot with Normalized Data", xlab = "Values", ylab = "Density", col = "blue")
+# Adding vertical lines for the mean, Z-values and the T-values.
+abline(v = mean_value_normalized, col = "red", lty = 2, lwd = 2)
+abline(v = z_values_scaled[1], col = "green", lty = 2, lwd = 2)
+abline(v = z_values_scaled[2], col = "green", lty = 2, lwd = 2)
+abline(v = t_values_scaled[1], col = "orange", lty = 2, lwd = 2)
+abline(v = t_values_scaled[2], col = "orange", lty = 2, lwd = 2)
+#Adding labels for mean, Z-values and the T-values.
+text(mean_value_normalized, max(density_plot_normalized$y) * 0.8, "Mean", pos = 3, col = "red")
+text(z_values_scaled[1], max(density_plot_normalized$y) * 0.7, "Z - 95%", pos = 3, col = "green")
+text(z_values_scaled[2], max(density_plot_normalized$y) * 0.7, "Z + 95%", pos = 1, col = "green")
+text(t_values_scaled[1], max(density_plot_normalized$y) * 0.6, "T - 95%", pos = 3, col = "orange")
+text(t_values_scaled[2], max(density_plot_normalized$y) * 0.6, "T + 95%", pos = 1, col = "orange")
+```
+<B>Density plot with Normalized data:</B><BR>The density plot is produced for the normalized dataset as an extension of the analysis. Vertical lines in this plot indicate the mean as well as the Z and T values for a 95% confidence interval. An additional level of comprehension regarding the influence of sample size on confidence intervals is provided by the graphical comparison of Z and T values.<BR>
+From the density plot it is evident that the mean is plotted at mid of the plot with red colour dotted line. And two lines Z and T values for 95% confidence interval is presented using dotted orange line. Density on y-axis and values on X-axis.
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B>Task 1.7 creating a box plot of all the stores with data labels for the boxplot statistics and red dots for means.</B></FONT>
+```{r, Task1.7}
+# Creating a palette of colors for the box plot.
+boxplot_colors <- c("#5DA5DA", "#5DA5DA", "#5DA5DA", "#5DA5DA", "#DECF3F", "#DECF3F", "#DECF3F", "#DECF3F", "#DECF3F", "#FF9DA7", "#FF9DA7", "#FF9DA7", "#FF9DA7", "#FF9DA7", "#2CA02C", "#2CA02C", "#2CA02C", "#2CA02C", "#2CA02C")
+
+#Creating the matrix named store_stats and displaying statistics on the respective graph.
+x_positions <- seq(0.5, 20.5, by = 1)
+store_stats <- matrix(NA, nrow = 20, ncol = 5)
+for (i in 1:20) {
+  store_stats[i, ] <- round(boxplot.stats(Salary_Survey[[i]])$stats, 1)
+}
+# Using the transpose of store_stats for getting the correct y_positions.
+y_positions <- t(store_stats)
+#Displaying the  boxplot with the data labels.
+boxplot(
+  Salary_Survey,
+  col = boxplot_colors,
+  border = "black",
+  notch = FALSE,
+  outline = FALSE,
+  main = "Salary Distribution Across Stores",
+  xlab = "Stores",
+  ylab = "Salary",
+  ylim = c(0, 20),  # Set your own y-axis limit
+  names = paste("Store", 1:20),
+  las = 2  # Rotate x-axis labels vertically
+)
+#Adding the data labels for box plot statistics.
+for (i in 1:20) {
+  text(
+    x = x_positions[i],
+    y = y_positions[, i],
+    labels = y_positions[, i],
+    pos = 3,
+    cex = 0.6,
+    col = "black"
+  )
+}
+#Obtaining the means for each store and creation of a matrix named store_means.
+store_means <- matrix(NA, nrow = 20, ncol = 1)
+for (i in 1:20) {
+  store_means[i, ] <- mean(Salary_Survey[[i]], na.rm = TRUE)
+}
+# Flatten the store_means matrix to vector.
+store_means_flat <- as.vector(store_means)
+#Adding means to corresponding box using the points().
+for (i in 1:length(x_positions)) {
+  points(x = x_positions[i], y = store_means_flat[i], col = "red", pch = 16)
+}
+```
+<B>Box Plot:</B><BR>The final graphical representation takes the form of a boxplot, providing a visual summary of the salary distribution across different stores. The addition of data labels and mean points enhances the interpretability of the box plot. Building 90% and 99% confidence intervals for the population's percentage of pet owners is the main goal of this task. Using statistical methods and techniques, the analysis seeks to shed light on how accurate pet ownership estimates are. 
+<BR>In the box plot we can see store 1 to store 20 all box plots. And the range of the store to is 12.2 to 17.7 salary. It seems having the highest range. But store 20's mean salary is not the highest among all the stores. Store 15 has the highest mean salary with nearly 15.2 mean salary. And the store 13 has the least average salary which is around just 6.
+
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B>Task 2</B></FONT>
+<P> We have provided with the pet data. This task 2 is a comprehensive investigation that centers on a survey that looks into pet ownership in a sample of 204 people. The dataset, which was taken from the M2Data(2023).xlsx file, records people's binary answers to questions about pet ownership. They are categorized as either "Yes, I own one or more pets" or "No, I do not own any pet."
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 2.1: Calculation of Confidence Intervals of Pet Ownership.</B></FONT>
+```{r, Task2.1,results='asis',warning=FALSE}
+# Convert "Yes" and "No" to binary values (1 and 0)
+pet_data_binary <- data.frame(
+  No...1 = ifelse(pet_data$No...1 == "Yes", 1, 0),
+  Yes...2 = ifelse(pet_data$Yes...2 == "Yes", 1, 0),
+  No...3 = ifelse(pet_data$No...3 == "Yes", 1, 0),
+  Yes...4 = ifelse(pet_data$Yes...4 == "Yes", 1, 0),
+  No...5 = ifelse(pet_data$No...5 == "Yes", 1, 0),
+  No...6 = ifelse(pet_data$No...6 == "Yes", 1, 0),
+  Yes...7 = ifelse(pet_data$Yes...7 == "Yes", 1, 0),
+  No...8 = ifelse(pet_data$No...8 == "Yes", 1, 0),
+  No...9 = ifelse(pet_data$No...9 == "Yes", 1, 0),
+  No...10 = ifelse(pet_data$No...10 == "Yes", 1, 0),
+  No...11 = ifelse(pet_data$No...11 == "Yes", 1, 0),
+  Yes...12 = ifelse(pet_data$Yes...12 == "Yes", 1, 0)
+)
+# Function for calculating the confidence intervals for proportion.
+calculate_confidence_intervals <- function(data_column, confidence_level) {
+  prop_test_result <- prop.test(sum(data_column), length(data_column), conf.level = confidence_level)
+  return(c(prop_test_result$conf.int[1], prop_test_result$conf.int[2]))
+}
+# Calculating the confidence intervals for each variable and confidence level.
+confidence_levels <- c(0.90, 0.99)
+confidence_intervals <- sapply(pet_data_binary, function(column) {
+  sapply(confidence_levels, function(level) {
+    calculate_confidence_intervals(column, level)
+  })
+})
+# Creating the data frame.
+pet_confidence_intervals_df <- data.frame(
+  Confidence_Level = rep(paste0(confidence_levels * 100, "%"), each = ncol(pet_data_binary)),
+  Variable = rep(names(pet_data_binary), times = length(confidence_levels)),
+  Lower_Limit = as.vector(confidence_intervals[1, ]),
+  Upper_Limit = as.vector(confidence_intervals[2, ])
+)
+# Displaying the table.
+library(kableExtra)
+pet_confidence_intervals_table <- kable(
+  pet_confidence_intervals_df,
+  format = "html",
+  col.names = c("Confidence Level", "Variable", "Lower Limit", "Upper Limit"),
+  caption = "Confidence Intervals for the Population Proportion of People Owning Pets.",
+  align = "c",
+  col.align = c("c", "c", "c", "c"),
+  booktabs = TRUE,
+  linesep = "",
+  row.names = FALSE
+) %>%
+  kable_styling(full_width = FALSE)
+print(pet_confidence_intervals_table)
+```
+We generated confidence intervals for the population proportion of people owning the pets. We used confidence levels 90% and the 99% for generating the lower limit and the upper limits of the data at that particular confidence level.<BR>
+At 90% confidence level at variable 1 the lower limit is 0.3098431 and upper limit is 0.6901569. And at the 99% confidence level the lower limit is 0.3098431 and upper limit is 0.6901569.
+<P><BR>
+<FONT SIZE=3 COLOR='#A11515'>
+<B> Task 2.2:Generating a Bar Plot, the Pie Chart from the pets data.</B></FONT>
+```{r,Task2.2}
+# Converting the data to a factor.
+pet_data_factor <- as.factor(unlist(pet_data))
+# Bar plot
+par(mfrow=c(1,2))  # Set up a 1-row, 2-column layout
+barplot(table(pet_data_factor), main="Bar Plot of Pet Ownership", col=c("skyblue", "salmon"), legend.text=TRUE)
+# Pie chart
+pie(table(pet_data_factor), main="Pie Chart of Pet Ownership", col=c("skyblue", "salmon"))
+```
+<BR><B>Bar plot:</B><BR>
+We generated a bar plot using the pet data. In the bar plot we can see nearly ``80 people chose NO`` and `` Over 100 people chose YES`` for having the pets.
+<BR><B>Pie Chart:</B><BR>
+Pie chart is generated using the pet data sheet. From the pie chart it is evident that Those who don't have pets are comprising to nearly 160 degrees of the pie chart and those who having the pets are comprising  to 200 degrees in the pie chart and this region is presented with orange colour.
+<BR>
+<FONT SIZE =4, COLOR="#A11515">
+<B>Conclusion:</B></FONT><BR>
+<P>
+In this project we gone through certain tasks.
+<BR><B>Task 1:Confidence Intervals of Salary Survey data.</B><BR>which covers Confidence Intervals (task 1.1) One, Using Z-values, we calculated confidence intervals at 95%, 97%, and 99% by treating the whole dataset as a single entity. The final values were combined into an extensive table that displayed the interval widths, upper and lower confidence limits, and error margins. This method provides a worldwide view of the data distribution because it is based on a grand mean that is computed from the complete dataset.<BR>
+In the Task 1.2, Second Confidence Interval,
+In contrast, a more complex image appeared when we used T-values to compute confidence intervals for specific stores. Confidence intervals were obtained by calculating the mean and standard deviation for each store. A more granular understanding of the variability across stores was presented in the resulting table.
+<BR>A comprehensive understanding of the dataset was made possible by normalizing the data, investigating density plots for both raw and normalized data, and using box plots to visualize the distribution. Every stage deepened our understanding and demonstrated the potency of fusing powerful visualization techniques with statistical analysis.
+To sum up, the assignments completed in Task 1 improved statistical abilities and emphasized the value of context-aware approaches. The notion that statistical analyses need to be in line with the intrinsic properties of the dataset was reaffirmed by comparing the global and localized confidence intervals. For upcoming investigations into statistical approaches and their practical uses, this project provides a strong basis.<BR>
+<B>Task 2: Analysis of Pet Ownership:</B><BR>
+In conclusion, this project combined data visualization and statistical methods to offer a thorough understanding of pet ownership. While normalization and visualization techniques improved data interpretation, confidence interval comparisons between various strategies brought out the subtleties in precision. These observations support well-informed decision-making regarding the trends in pet ownership.
+the overarching goal is to unravel patterns and tendencies related to pet ownership within the surveyed population. The confidence intervals provide a statistical framework for understanding the variability and reliability of estimates, while the visualizations offer an intuitive grasp of the distribution of pet ownership. 
+<BR>
+The subsequent sections delve into the detailed execution of each task, unraveling the insights gained and the implications these findings may have on understanding the dynamics of pet ownership within the surveyed group.
+The process of normalization, as illustrated by density plots and confidence intervals, has made it possible for us to see the wage data on a uniform scale. Furthermore, the distribution of salaries across stores has been successfully represented by the boxplot visualization, with mean points and data labels improving interpretability.<BR>
+Moving on to the investigation of pet ownership trends, our data has shown how common pet ownership is in the people we polled. We determined the degree of certainty in our estimates by converting categorical responses into binary values and computing confidence intervals for every variable.
+A useful supplement to the numerical analyses is the visual depiction of pet ownership through a matrix of a pie chart and a bar plot, which makes it easier to understand the distribution right away.
+<BR><B>New Skills Gained:</B><BR>
+My understanding of confidence intervals has deepened as a result of the project, which has forced me to use various approaches (Z- and T-values) depending on the situation. My understanding of standardizing datasets was expanded by the data normalization process, and creating density plots improved my visualization abilities. Additionally, using box plots for multi-store data increased my proficiency with exploratory data analysis.
+<BR><B>Overall Thought:</B><BR>
+This two-pronged analysis demonstrates the flexibility of statistical techniques in revealing intricate patterns in a variety of datasets. Whether determining wage distributions or measuring pet ownership patterns, our methodology combined inferential analysis, descriptive statistics, and eye-catching visuals to tell a comprehensive story.
+The insights gleaned from this analysis will be useful to employers, employees, and the pet-related industries as we navigate the complex relationship between compensation structures and individual pet ownership preferences. We aspire that this investigation acts as a stimulant for well-informed decision-making and encourages more research into the complex domains of lifestyle selections and workforce dynamics.
+<P><BR>
+<FONT SIZE =4, COLOR="#A11515">
+<B>Bibliography</B><BR>
+<B>References:</B></FONT><BR>
+1. Kable, KableExtra codes: link:https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html.
+<BR>
+2. Professor Diana Chiluiza, About the R, RPUBS: https://rpubs.com/Dee_Chiluiza/home.
+<BR>
+3. Bluman series, A(2017). Statistics:A Guide to the Unknown, Wadsworth Publishing.
+<BR>
+4. Bar plot, Geeksforgeeks, website: https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
+<BR>
+5. Matrix code, Bar Plot code.:
+   Pie chart:    https://rpubs.com/Dee_Chiluiza/995745.
+   Bar plot:   https://rpubs.com/Dee_Chiluiza/barplots.
+<BR>
+6. Box plot RPUBS.:  https://rpubs.com/Dee_Chiluiza/816756.
+<BR>
+7. Some useful functions:https://dplyr.tidyverse.org/reference/rename.html.
+<BR>
+8. Zack, Sept, 2020. "How to Perform a COUNTIF Function in R", Statology.Website lin: https://www.statology.org/countif-r/.
+<BR>
+9. Kabacoff, R. 2017. Pie charts. "Quick R by Data Camp." Website link: https://www.statmethods.net/graphs/pie.html.
